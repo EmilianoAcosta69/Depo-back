@@ -9,15 +9,17 @@ const User = require("./models/User");
 const app = express();
 const JWT_SECRET = "deposito_secreto_123";
 
+
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log("Mongo conectado"))
+    .catch(err => console.error("Mongo error:", err));
+
 app.use(cors({
-  origin: "*"
+    origin: "*"
 }));
 
 app.use(express.json());
 require("dotenv").config();
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("Mongo conectado"))
-    .catch(err => console.error(err));
 
 app.get("/test", (req, res) => {
     res.json({ ok: true });
@@ -51,34 +53,34 @@ const adminMiddleware = (req, res, next) => {
 
 
 app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+    const { username, password } = req.body;
 
-  const user = await User.findOne({ username });
+    const user = await User.findOne({ username });
 
-  if (!user) {
-    return res.status(401).json({ error: "Credenciales inválidas" });
-  }
-
-  if (user.password !== password) {
-    return res.status(401).json({ error: "Credenciales inválidas" });
-  }
-
-  const token = jwt.sign(
-    {
-      id: user._id,
-      role: user.role
-    },
-    JWT_SECRET,
-    { expiresIn: "8h" }
-  );
-
-  res.json({
-    token,
-    user: {
-      username: user.username,
-      role: user.role
+    if (!user) {
+        return res.status(401).json({ error: "Credenciales inválidas" });
     }
-  });
+
+    if (user.password !== password) {
+        return res.status(401).json({ error: "Credenciales inválidas" });
+    }
+
+    const token = jwt.sign(
+        {
+            id: user._id,
+            role: user.role
+        },
+        JWT_SECRET,
+        { expiresIn: "8h" }
+    );
+
+    res.json({
+        token,
+        user: {
+            username: user.username,
+            role: user.role
+        }
+    });
 });
 
 
@@ -167,7 +169,7 @@ app.put("/products/:id", authMiddleware, adminMiddleware, async (req, res) => {
 });
 
 
-app.get("/create-admin", async (req, res) => {
+/*app.get("/create-admin", async (req, res) => {
   const user = await User.create({
     username: "admin",
     password: "1234",
@@ -176,10 +178,10 @@ app.get("/create-admin", async (req, res) => {
 
   res.json(user);
 });
-
+*/
 
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
-  console.log("Backend OK en puerto", PORT);
+    console.log("Backend OK en puerto", PORT);
 });
