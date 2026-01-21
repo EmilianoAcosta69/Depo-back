@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 
-const Product = require("./models/Product");
+const Product = require("./models/Product")
 const User = require("./models/User");
 
 const app = express();
@@ -169,7 +169,7 @@ app.put("/products/:id", authMiddleware, adminMiddleware, async (req, res) => {
 });
 
 
-/*app.get("/create-admin", async (req, res) => {
+app.get("/create-admin", async (req, res) => {
   const user = await User.create({
     username: "admin",
     password: "1234",
@@ -178,7 +178,7 @@ app.put("/products/:id", authMiddleware, adminMiddleware, async (req, res) => {
 
   res.json(user);
 });
-*/
+
 
 const PORT = process.env.PORT || 4000;
 
