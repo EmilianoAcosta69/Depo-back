@@ -178,6 +178,8 @@ app.get("/create-admin", async (req, res) => {
 });
 
 
-app.listen(process.env.PORT || 4000, () => {
-  console.log("Backend OK");
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log("Backend OK en puerto", PORT);
 });
