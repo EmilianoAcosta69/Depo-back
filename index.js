@@ -29,6 +29,9 @@ app.get("/test", (req, res) => {
     res.json({ ok: true });
 });
 
+app.get("/", (req, res) => {
+  res.json({ ok: true, message: "API funcionando" });
+});
 
 const authMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
