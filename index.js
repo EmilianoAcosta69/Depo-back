@@ -30,7 +30,7 @@ app.get("/test", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.json({ ok: true, message: "API funcionando" });
+    res.json({ ok: true, message: "API funcionando" });
 });
 
 const authMiddleware = (req, res, next) => {
@@ -62,10 +62,15 @@ const adminMiddleware = (req, res, next) => {
 app.post("/login", async (req, res) => {
     const { username, password } = req.body;
 
+    console.log("LOGIN BODY:", username, password);
+    console.log("DB NAME:", mongoose.connection.name);
+
     const user = await User.findOne({ username });
 
+
+    console.log("USER FOUND:", user);
     if (!user) {
-        return res.status(401).json({ error: "Credenciales inválidas" });
+        return res.status(401).json({ error: "Usuario inválido" });
     }
 
     if (user.password !== password) {
@@ -177,13 +182,13 @@ app.put("/products/:id", authMiddleware, adminMiddleware, async (req, res) => {
 
 
 app.get("/create-admin", async (req, res) => {
-  const user = await User.create({
-    username: "admin",
-    password: "1234",
-    role: "admin"
-  });
+    const user = await User.create({
+        username: "admin",
+        password: "1234",
+        role: "admin"
+    });
 
-  res.json(user);
+    res.json(user);
 });
 
 
